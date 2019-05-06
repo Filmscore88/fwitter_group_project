@@ -7,6 +7,8 @@ class ApplicationController < Sinatra::Base
     set :views, 'app/views'
   end
 
+  // testing to show how to make a pull request
+
   get '/' do
     erb :index
   end
