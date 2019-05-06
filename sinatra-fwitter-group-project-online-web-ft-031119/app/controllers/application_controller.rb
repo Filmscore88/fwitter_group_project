@@ -11,51 +11,56 @@ class ApplicationController < Sinatra::Base
     erb :index
   end
 
-  get '/signup' do
-    if logged_in?
-      redirect '/tweets/tweets'
-    else
-    erb :'/users/create_user'
-    end
-  end
 
-  post '/signup' do
 
-    if params[:username] == '' || params[:email] =='' || params[:password] == ''
-      redirect '/signup'
-    else
-      user = User.create(params)
-      session[:user_id] = user.id
-      redirect '/tweets/tweets'
-    end
-  end
-
-  def logged_in?
-    !!current_user
-  end
-
-  def login(username, password)
-    user = User.find_by(:username => username)
-    if  user && user.authenticate(password)
-  	session[:id] = user.id
-    else
-  	 redirect "/login"
-    end
-  end
-
-  def current_user
-    @current_user ||= User.find_by(:user_id => session[:user_id]) if session[:user_id]
-
-  end
-
-  def login_sequence
-    if !logged_in?
-      redirect '/login'
+    get '/signup' do
+      if !logged_in?
+        erb :'users/create_user'
+      else
+        redirect '/tweets'
+      end
     end
 
-  end
+    post '/signup' do
 
-  def log_out
-    session.destroy
+      if params[:username] == '' || params[:email] =='' || params[:password] == ''
+        redirect '/signup'
+      else
+        user = User.create(params)
+        session[:user_id] = user.id
+        redirect '/tweets'
+      end
+    end
+
+    helpers do
+
+      def logged_in?
+        !!current_user
+      end
+
+      def login(username, password)
+        user = User.find_by(:username => username)
+        if  user && user.authenticate(password)
+      	session[:user_id] = user.id
+        else
+      	 redirect "/login"
+        end
+      end
+
+    def current_user
+      @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
+
+   end
+
+    def login_sequence
+      if !logged_in?
+        redirect '/login'
+      end
+
+    end
+
+    def log_out
+      session.destroy
+    end
   end
 end

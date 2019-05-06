@@ -5,6 +5,11 @@ class TweetsController < ApplicationController
   end
 
   post '/tweets' do
-    
+
+  end
+
+  get '/tweets' do
+    @tweets = Tweet.all
+    erb :'tweets/tweets'
   end
 end
