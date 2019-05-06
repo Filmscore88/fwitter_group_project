@@ -11,7 +11,7 @@ class ApplicationController < Sinatra::Base
     erb :index
   end
 
-
+  // new matieral to show everyone
 
     get '/signup' do
       if !logged_in?
